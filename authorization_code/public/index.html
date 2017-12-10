@@ -35,13 +35,32 @@
     </div>
 
     <script id="recently-played" type="text/x-handlebars-template">
-      <h2>Recently played songs</h2>
-      <ul>
+      <h2>Recently played songs (avg valence: {{this.mood}})</h2>
         
-          {{#each this}}
-          <li>{{mood}} {{artist}} - {{song}} - {{album}} ({{valence}})</li>
+      <div class="row">
+          
+          {{#each this.tracks}}
+
+          <div class="col-sm-4">
+            <div class="card">
+                <a href="{{link}}"><img class="card-img-top" src="{{coverart}}" alt="Card image cap"></a>
+              <div class="card-body">
+                <h4 class="card-title">{{song}} ({{valence}})</h4>
+                <p class="card-text">{{mood}} {{artist}} - {{album}}</p>
+
+                <div class="progress" style="height: 3px">
+                    <div class="progress-bar {{class}}" role="progressbar" aria-valuenow="{{percentage}}"
+                    aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
+                      <span class="sr-only">70% Complete</span>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
           {{/each}}
-      </ul>
+
+      </div>
     </script>
 
     <script id="user-profile-template" type="text/x-handlebars-template">

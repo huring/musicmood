@@ -32,7 +32,11 @@
 
     var getTrackList = function(response) {
 
-        var songlist = [];
+        var songlist = {
+            tracks: [],
+            mood: 0
+        };
+        var mood = 0;
         // var trackID = response.items[9].track.id;
 
         $(response.items).each(function(i, item) {
@@ -40,8 +44,12 @@
 
             track.id = item.track.id;
             track.artist = item.track.artists[0].name;
-            track.song = item.track.name;
-            track.album = item.track.album.name;
+            track.song = item.track.name.substring(0, 30);
+            track.album = item.track.album.name.substring(0, 20);
+            track.coverart = item.track.album.images[1].url;
+            track.link = item.track.external_urls.spotify
+
+            console.log(track.link);
 
             $.ajax({
                 url: 'https://api.spotify.com/v1/audio-features/?ids=' + track.id,
@@ -51,22 +59,33 @@
                 success: function(response) {                    
                     var valence = round(response.audio_features[0].valence, 5)
                     track.valence = valence;
+                    track.percentage = (valence*100)
 
-                    if (valence >= 0.5) {
-                        track.mood = ":-)"
+                    mood += valence;
+
+                    if (valence <= 0.3) {
+                        track.mood = "😢"
+                        track.class = "progress-bar-danger"
+                    } else if (valence <= 0.5){
+                        track.mood = "😐"
+                        track.class = "progress-bar-warning"
                     } else {
-                        track.mood = ":-("
+                        track.mood = "😀"
+                        track.class = "progress-bar-success"
                     }
 
+                    songlist.mood = round(mood/20, 2);
                     recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(songlist);
+           
+                    console.log(songlist);  
+           
                 }
             });
 
-            songlist.push(track);
+            songlist.tracks.push(track);
 
         });
-
-        console.log(songlist);  
+        
 
         // recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(songlist);
     }

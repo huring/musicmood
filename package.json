@@ -9,5 +9,6 @@
     "node-gracenote": "github:ddanninger/node-gracenote",
     "querystring": "~0.2.0",
     "request": "~2.34.0"
-  }
+  },
+  "scripts": { "start": "node authorization_code/app.js" }
 }
