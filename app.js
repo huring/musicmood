@@ -20,7 +20,7 @@ var api = new Gracenote(gnClientId,gnClientTag,gnUserId);
 
 var client_id = '0cbdaa6cbba84325bf215dedcc9a6caa'; // Your client id
 var client_secret = '9ae4aeaa6a0f4017b4be4da93a1b4286'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = 'https://secret-fortress-89977.herokuapp.com/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
