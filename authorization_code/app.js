@@ -11,10 +11,16 @@ var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var Gracenote = require("node-gracenote");
 
-var client_id = 'CLIENT_ID'; // Your client id
-var client_secret = 'CLIENT_SECRET'; // Your secret
-var redirect_uri = 'REDIRECT_URI'; // Your redirect uri
+var gnClientId = "2143157455-C407287AC26ABA7E016270E3471FBBB3";
+var gnClientTag = "C407287AC26ABA7E016270E3471FBBB3";
+var gnUserId = null;
+var api = new Gracenote(gnClientId,gnClientTag,gnUserId);
+
+var client_id = '0cbdaa6cbba84325bf215dedcc9a6caa'; // Your client id
+var client_secret = '9ae4aeaa6a0f4017b4be4da93a1b4286'; // Your secret
+var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -44,7 +50,7 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private user-read-email user-read-recently-played';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -116,6 +122,22 @@ app.get('/callback', function(req, res) {
     });
   }
 });
+
+app.get('/match_mood', function(req, res) {
+
+  var access_token = body.access_token,
+  refresh_token = body.refresh_token;
+
+  var options = {
+    url: 'https://api.spotify.com/v1/me',
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  };
+
+  request.get(options, function(error, response, body) {
+    console.log(response);
+  });
+})
 
 app.get('/refresh_token', function(req, res) {
 
