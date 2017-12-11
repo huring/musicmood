@@ -11,16 +11,11 @@ var express = require('express'); // Express web server framework
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-var Gracenote = require("node-gracenote");
-
-var gnClientId = "2143157455-C407287AC26ABA7E016270E3471FBBB3";
-var gnClientTag = "C407287AC26ABA7E016270E3471FBBB3";
-var gnUserId = null;
-var api = new Gracenote(gnClientId,gnClientTag,gnUserId);
 
 var client_id = '0cbdaa6cbba84325bf215dedcc9a6caa'; // Your client id
 var client_secret = '9ae4aeaa6a0f4017b4be4da93a1b4286'; // Your secret
-var redirect_uri = 'https://secret-fortress-89977.herokuapp.com/callback'; // Your redirect uri
+var redirect_uri = 'https://secret-fortress-89977.herokuapp.com/callback'; // Heroku
+// var redirect_uri = 'http://localhost:8888/callback'; // Localhost
 
 /**
  * Generates a random string containing numbers and letters
