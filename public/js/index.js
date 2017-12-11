@@ -1,5 +1,3 @@
-
-
 (function() {
     /**
      * Obtains parameters from the hash of the URL
@@ -49,8 +47,6 @@
             track.coverart = item.track.album.images[1].url;
             track.link = item.track.external_urls.spotify
 
-            console.log(track.link);
-
             $.ajax({
                 url: 'https://api.spotify.com/v1/audio-features/?ids=' + track.id,
                 headers: {
@@ -63,31 +59,18 @@
 
                     mood += valence;
 
-                    if (valence <= 0.3) {
-                        track.mood = "😢"
-                        track.class = "progress-bar-danger"
-                    } else if (valence <= 0.5){
-                        track.mood = "😐"
-                        track.class = "progress-bar-warning"
-                    } else {
-                        track.mood = "😀"
-                        track.class = "progress-bar-success"
-                    }
+                    track.mood = valenceToMood(valence*1000).mood;
 
                     songlist.mood = round(mood/20, 2);
                     recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(songlist);
-           
-                    console.log(songlist);  
-           
+                      
                 }
             });
 
             songlist.tracks.push(track);
 
         });
-        
 
-        // recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(songlist);
     }
 
     if (error) {
@@ -126,4 +109,39 @@
     function round(value, precision) {
         var multiplier = Math.pow(10, precision || 0);
         return Math.round(value * multiplier) / multiplier;
+    }
+
+    function valenceToMood(num) {
+
+        var def = [num];
+        var n = [
+            {val: 100, mood: '😭'},
+            {val: 200, mood: '😢'},
+            {val: 300, mood: '😩'},
+            {val: 400, mood: '🙁'},
+            {val: 500, mood: '😶'},
+            {val: 600, mood: '🙂'},
+            {val: 700, mood: '😊'},
+            {val: 800, mood: '😀'},
+            {val: 900, mood: '😂'},
+            {val: 1000, mood: '🤣'},
+        ];
+        
+        var result = [];
+        
+        for (var i = 0; i < def.length; i++){
+            var val = def[i];
+            for (var j = 0; j < n.length; j++){
+                var nVal = n[j];                
+                if (nVal.val > val){
+                    var closest = n[j-1] == undefined ? nVal : 
+                        nVal - val > val - n[j-1].val ? n[j-1] : nVal;
+                    
+                    result.push(closest);
+                    break;
+                }    
+            }
+        }
+            
+        return result[0];
     }
