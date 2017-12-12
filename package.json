@@ -1,6 +1,6 @@
 {
   "author": "Lars Huring",
-  "name": "Music mood finder",
+  "name": "music-mood-finder",
   "description": "Find mood (valence) for latest songs played on spotify",
   "version": "0.0.2",
   "dependencies": {
