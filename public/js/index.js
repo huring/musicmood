@@ -82,7 +82,7 @@
     } else {
         if (access_token) {
 
-        console.info("We have a good access token")
+        console.info("We have a good access token");
 
         $.ajax({
             url: 'https://api.spotify.com/v1/me',
