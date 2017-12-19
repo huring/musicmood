@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <title>Spotify Mood finder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
@@ -13,10 +13,15 @@
         white-space: nowrap;
         width: 500px;
       }
+
+      a {
+        color: #004280
+      }
     </style>
   </head>
 
   <body>
+    <div id="test-results"></div>
     <div class="container">
       <div id="login">
         <h1>Start by logging in to Spotify</h1>
@@ -40,15 +45,15 @@
 
           <div class="col-sm-4">
             <div class="card">
-                <a href="{{link}}"><img class="card-img-top" src="{{coverart}}" alt="Card image cap"></a>
+                <a href="{{link}}"><img class="card-img-top" src="{{coverart}}" alt="Cover image: {{album}}"></a>
               <div class="card-body">
                 <h4 class="card-title">{{song}}</h4>
-                <h6 class="card-subtitle mb-2 text-muted">Valence: {{valence}}</h6>
+                <h6 class="card-subtitle mb-2">Valence: {{valence}}</h6>
                 <p class="card-text">{{mood}} {{artist}} - {{album}}</p>
 
                 <div class="progress" style="height: 3px">
                     <div class="progress-bar {{class}}" role="progressbar" aria-valuenow="{{percentage}}"
-                    aria-valuemin="0" aria-valuemax="100" style="width:{{percentage}}%">
+                    aria-valuemin="0" style="width:{{percentage}}%">
                       <span class="sr-only">70% Complete</span>
                     </div>
                 </div>
@@ -65,7 +70,7 @@
       <h1>Inloggad som {{display_name}}</h1>
       <div class="media">
         <div class="pull-left">
-          <img class="media-object" width="150" src="{{images.0.url}}" />
+          <img class="media-object" width="150" src="{{images.0.url}}" alt="{{display_name}}" />
         </div>
         <div class="media-body">
           <dl class="dl-horizontal">
@@ -74,11 +79,39 @@
             <dt>Email</dt><dd>{{email}}</dd>
             <dt>Spotify URI</dt><dd><a href="{{external_urls.spotify}}">{{external_urls.spotify}}</a></dd>
             <dt>Link</dt><dd><a href="{{href}}">{{href}}</a></dd>
-            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}">{{images.0.url}}</a></dd>
+            <dt>Profile Image</dt><dd class="clearfix"><a href="{{images.0.url}}" >{{images.0.url}}</a></dd>
             <dt>Country</dt><dd>{{country}}</dd>
           </dl>
         </div>
       </div>
+    </script>
+
+    <script id="error-message-template" type="text/x-handlebars-template">
+
+      {{#each this}}
+      
+        <div class="alert alert-warning">
+          <h4 class="alert-heading">Error: {{id}}, {{impact}} </h4>
+          <p>
+            {{description}}<br />
+            <span><a href="{{helpUrl}}"> {{help}}</a></span>
+          </p>
+
+          <ul>
+            {{#each this.nodes}}
+              <li><span>{{failureSummary}}</span><br />{{target}} - {{html}}</li>
+            {{/each}}
+          </ul>
+
+          {{#each this.tags}}
+          <span class="badge badge-pill badge-info">{{this}}</span>
+
+          {{/each}}
+
+        </div>
+      
+      {{/each}}
+
     </script>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0-alpha.1/handlebars.min.js"></script>
@@ -90,26 +123,7 @@
 
     <script>
       
-      axe.run(function(err, results) {
-
-        
-        if (err) throw err;
-
-        if (results.violations.length === 0) {
-          console.log('No violations');
-        } else {
-          console.log("Violations:");
-
-          $.each(results.violations, function(i, item) {
-            console.error(item.description);
-          }); 
-
-        }
-          
-
-        // ok(results.violations.length === 0, 'Should be no a11y issues');
-      });
-
+      
     </script>
 
   </body>

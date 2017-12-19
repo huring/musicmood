@@ -37,6 +37,9 @@
         var mood = 0;
         // var trackID = response.items[9].track.id;
 
+        console.info("Loading track list...");
+        console.info(response.items.length);
+
         $(response.items).each(function(i, item) {
             var track = {};
 
@@ -63,11 +66,12 @@
 
                     songlist.mood = round(mood/20, 2);
                     recentlyPlayedPlaceholder.innerHTML = recentlyPlayedTemplate(songlist);
-                      
+                    
                 }
             });
 
             songlist.tracks.push(track);
+            
 
         });
 
@@ -78,6 +82,8 @@
     } else {
         if (access_token) {
 
+        console.info("We have a good access token")
+
         $.ajax({
             url: 'https://api.spotify.com/v1/me',
             headers: {
@@ -85,7 +91,6 @@
             },
             success: function(response) {
                 userProfilePlaceholder.innerHTML = userProfileTemplate(response);
-
                 $('#login').hide();
                 $('#loggedin').show();
             }
@@ -144,4 +149,28 @@
         }
             
         return result[0];
+    }
+
+    function testA11y() {
+        var errorSource = document.getElementById('error-message-template').innerHTML,
+        errorTemplate = Handlebars.compile(errorSource),
+        errorPlaceholder = document.getElementById('test-results');
+
+        axe.run(function(err, results) {
+
+            if (err) throw err;
+
+            if (results.violations.length === 0) {
+            console.log('No violations');
+            } else {
+            console.log("Violations:");
+
+            errorPlaceholder.innerHTML = errorTemplate(results.violations);
+
+            $.each(results.violations, function(i, item) {
+                console.log(item);
+            }); 
+
+            }
+        });
     }
