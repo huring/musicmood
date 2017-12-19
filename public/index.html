@@ -85,7 +85,33 @@
     <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+    <script src="scripts/axe-core/axe.min.js"></script>
     <script src="js/index.js"></script>
+
+    <script>
+      
+      axe.run(function(err, results) {
+
+        
+        if (err) throw err;
+
+        if (results.violations.length === 0) {
+          console.log('No violations');
+        } else {
+          console.log("Violations:");
+
+          $.each(results.violations, function(i, item) {
+            console.error(item.description);
+          }); 
+
+        }
+          
+
+        // ok(results.violations.length === 0, 'Should be no a11y issues');
+      });
+
+    </script>
+
   </body>
 </html>
 
