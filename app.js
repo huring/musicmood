@@ -12,8 +12,8 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-var client_id = '0cbdaa6cbba84325bf215dedcc9a6caa'; // Your client id
-var client_secret = '9ae4aeaa6a0f4017b4be4da93a1b4286'; // Your secret
+var client_id = '4b3755c0-6b8e-4be4-8b6c-164462a0a811'; // Your client id
+var client_secret = '2fcadab6-918e-4c70-9b1e-8cf52c82e3c8'; // Your secret
 // var redirect_uri = 'https://secret-fortress-89977.herokuapp.com/callback'; // Heroku
 var redirect_uri = 'http://localhost:8888/callback'; // Localhost
 
@@ -38,7 +38,6 @@ var app = express();
 
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
-
 app.use('/scripts', express.static(__dirname + '/node_modules/'));
 
 app.get('/login', function(req, res) {
@@ -47,12 +46,11 @@ app.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'user-read-private user-read-email user-read-recently-played';
-  res.redirect('https://accounts.spotify.com/authorize?' +
+  var scope = '';
+  res.redirect('https://flow.polar.com/oauth2/authorization?' +
     querystring.stringify({
       response_type: 'code',
       client_id: client_id,
-      scope: scope,
       redirect_uri: redirect_uri,
       state: state
     }));
@@ -75,7 +73,7 @@ app.get('/callback', function(req, res) {
   } else {
     res.clearCookie(stateKey);
     var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
+      url: 'https://polarremote.com/v2/oauth2/token',
       form: {
         code: code,
         redirect_uri: redirect_uri,
@@ -94,14 +92,14 @@ app.get('/callback', function(req, res) {
             refresh_token = body.refresh_token;
 
         var options = {
-          url: 'https://api.spotify.com/v1/me',
+          url: 'https://www.polaraccesslink.com/v3/users/2278512',
           headers: { 'Authorization': 'Bearer ' + access_token },
           json: true
         };
 
         // use the access token to access the Spotify Web API
         request.get(options, function(error, response, body) {
-          // console.log(body);
+          console.log(body);
         });
 
         // we can also pass the token to the browser to make requests from there
@@ -126,7 +124,7 @@ app.get('/match_mood', function(req, res) {
   refresh_token = body.refresh_token;
 
   var options = {
-    url: 'https://api.spotify.com/v1/me',
+    url: 'https://www.polaraccesslink.com/v3/users',
     headers: { 'Authorization': 'Bearer ' + access_token },
     json: true
   };
